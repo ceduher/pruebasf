@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <div class="collapse navbar-collapse  justify-content-between" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% if app.user %}
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ path('articulo_index') }}">Articulos</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('user_index') }}">Usuarios</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('catalogo') }}">Catalogo</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onClick="verCarrito();">Ver Carrito</a>
+        </li>
+      {%  endif %}
+    </ul>
+    <span class="navbar-text">
+        {% if app.user %}
+            <i class="glyphicon glyphicon-user"></i>{{ app.user }} - <a href="{{ url('app_logout') }}">Salir</a>
+        {% else %}
+            <a href="{{ url('app_login') }}">Ingresar</a>
+        {%  endif %}
+    </span>
+  </div>
+</nav>

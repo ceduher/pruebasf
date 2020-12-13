@@ -1,0 +1,46 @@
+<div class="col-sm-4">
+    <div class="card border-secondary mb-4" style="margin:2%;">
+        <div class="card-body">
+            <h5 class="card-title">Articulo {{ articulo.id }}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Talla:</span>
+                        </div>
+                        <input class="form-control" type="text" value="{{ articulo.talla }}" readonly>
+                    </div>
+                    </li>
+                <li class="list-group-item">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Color:</span>
+                        </div>
+                        <input class="form-control" type="text" value="{{ articulo.color }}" readonly>
+                    </div>
+                    </li>
+                <li class="list-group-item">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Precio:</span>
+                        </div>
+                        <input class="form-control" type="text" value="{{ articulo.precioUni }}" readonly>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Cantidad:</span>
+                        </div>
+                        <input class="form-control" id="cantidad_{{articulo.id}}" type="number">
+                    </div>
+                    </li>
+            </ul>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onClick="agregarArticulo('{{articulo.id}}', '{{articulo.talla}}', '{{articulo.color}}', $('#cantidad_{{articulo.id}}').val(), {{ articulo.precioUni}});">Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

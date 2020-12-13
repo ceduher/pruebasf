@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+{% block title %}Catalogo{% endblock %}
+{% block body %}
+<style>#boxArticulo{display: block; float: left; margin-right: 2%; margin-bottom: 2%;}</style>
+<script>
+$.ajax({
+    url: Routing.generate('carrito_new'),
+    type: 'POST',
+    success: function(carrito) {
+        $("#carrito").val(carrito.id);
+    },
+    error: function(jqXHR, textStatus, errorThrown){}
+});
+
+function agregarArticulo(id, talla, color, cantidad, precio){
+    $.ajax({
+        url: Routing.generate('carrito_agregar'),
+        type: 'POST',
+        data: { 
+            id: id, 
+            cantidad: cantidad,
+            carrito: $("#carrito").val()
+        },
+        success: function() {
+            alert("Articulo agregado al carrito");
+            $("#cantidad_"+id).val('');
+        },
+        error: function(jqXHR, textStatus, errorThrown){}
+    });
+}
+
+function verCarrito(){
+    $('#tablaCarrito tbody').empty();
+    $.ajax({
+        url: Routing.generate('carrito_show', {id: $("#carrito").val()}),
+        type: 'POST',
+        success: function(data) {
+            $("#dialog").css("display","block").dialog({
+                width: 500,
+                height: 400
+            });
+            console.log(data);
+            $.each(data.renglones, function(i, item){
+                
+                if(item.length !== undefined){
+                    $.each(item, function(h, detItem){
+                        var tbodyBox = '<tr>'+
+                                            '<td>' + detItem.id_articulo + '</td>'+
+                                            '<td>' + detItem.talla + '</td>'+
+                                            '<td>' + detItem.color + '</td>'+
+                                            '<td>' + detItem.cantidad + '</td>'+
+                                            '<td>' + detItem.precio_uni + '</td>'+
+                                            '<td>' + (detItem.precio_uni*detItem.cantidad).toFixed(2) + '</td>'+
+                                    '</tr>';
+                        $('#tablaCarrito tbody').append(tbodyBox);                       
+                    });
+                }
+            });
+            var tFooterBox = '<tr>'+
+                                '<td colspan="3"><b>Envio</b></td>'+
+                                '<td><b>Cantidad</b></td>'+
+                                '<td></td>'+
+                                '<td><b>Total</b></td>'+
+                            '</tr>'+
+                            '<tr>'+
+                                '<td colspan="3">' + data.renglones.envio + '</td>'+
+                                '<td>' + data.renglones.cantidad_art + '</td>'+
+                                '<td></td>'+
+                                '<td>' + data.renglones.total + '</td>'+
+                            '</tr>';
+    
+            $('#tablaCarrito tbody').append(tFooterBox);
+        },
+        error: function(jqXHR, textStatus, errorThrown){}
+    });
+}
+</script>
+<div id="dialog" title="Basic dialog" style="display:none;">
+    <table id="tablaCarrito">
+        <thead>
+            <tr>
+                <th>Articulo</th>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Precio Art&iacute;culo</th>
+                <th>Precio x Cantidad</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfooter></tfooter>
+    </table>
+</div>
+<input id="carrito" type="hidden">
+
+<div class="card-group">
+{% for articulo in articulos %}
+    {% include 'catalogo/cajaArt.html.twig' with {'articulo' : articulo} %}
+{% else %}
+    <table class="table">
+        <tr>
+            <td colspan="6">no records found</td>
+        </tr>
+    </table>
+{% endfor %}
+</div>
+{% endblock %}
